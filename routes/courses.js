@@ -1,4 +1,4 @@
-// globals (?)
+// globals
 var mysql = require('mysql');
 var DATABASE = 'oerpublish';
 var conn = mysql.createConnection({
@@ -8,11 +8,6 @@ var conn = mysql.createConnection({
 	port: "3306",
 });
 conn.connect();
-
-// exports.findAll = function(req,res) {
-// 	res.send([{name:ab,description:"fake super intro class", professor:"Dr. OM"}, {name:'200'}, {name:'300'}]);
-// };
-
 
 exports.findAll = function(req,res) {
 	var course_details = new Array();
@@ -36,6 +31,7 @@ exports.findAll = function(req,res) {
 	);
 };
 
+//reminder for other piece -- possible exp to diff file
 exports.findByUnit = function(req, res) {
 	res.send({unit:req.params.unit, name: "SI 101", description: "a fake intro class"});
 };
