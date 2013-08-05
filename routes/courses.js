@@ -19,7 +19,7 @@ exports.findAll = function(req,res) {
 	var results, courseamt;
 	//console.log(conn);
 	conn.query('USE ' + DATABASE);
-	conn.query('SELECT content_type_course.field_course_code_value AS name, content_type_course.nid as nid, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value',
+	conn.query('SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value',
 		function(err, rows, fields) {
 			if (err) throw err;
 			// console.log('Result is: ', rows[0].solution);
