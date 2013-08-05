@@ -1,5 +1,7 @@
+ab = 105; // testing
+
 exports.findAll = function(req,res) {
-	res.send([{name:'100'}, {name:'200'}, {name:'300'}]);
+	res.send([{name:ab,description:"fake super intro class", professor:"Dr. OM"}, {name:'200'}, {name:'300'}]);
 };
 
 exports.findByUnit = function(req, res) {

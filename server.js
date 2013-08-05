@@ -1,5 +1,5 @@
 var express = require('express'),
-	bsl = require('./routes/courses');
+	courses = require('./routes/courses');
 var app = express();
 
 app.get('/courses', courses.findAll);
@@ -9,7 +9,7 @@ app.get('/courses/:date', courses.findByUnit)
 // {
 //   "date": "20130726",
 //   "name": "101",
-//   "description": "after dinner (sample)"
+//   "description": "fake description text"
 // }
 
 app.listen(3000);
