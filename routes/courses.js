@@ -11,7 +11,10 @@ conn.connect();
 
 /* TODOS */
 // 1st priority
+// TODO: add license to course details
+// TODO: add instructor, creator/maybe dscribe? info to course details
 // TODO: filter by instructor
+// TODO: filter by license
 // TODO: filter by department, unit
 // TODO: filter by tag
 // 2nd priority
