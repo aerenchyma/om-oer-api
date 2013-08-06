@@ -89,7 +89,7 @@ exports.filterName = function(req, res) {
 	var course_details = new Array();
 	conn.query('USE ' + DATABASE);
 	var filter = req.params.searchterm;
-	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value LIKE '" + filter + "' GROUP BY content_type_course.field_course_code_value",
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value LIKE '" + filter + "%' GROUP BY content_type_course.field_course_code_value",
 		function(err, rows, fields) {
 			if (err) throw err;
 			results = rows;
@@ -103,7 +103,23 @@ exports.filterName = function(req, res) {
 }
 
 
-
+exports.findName = function(req, res) {
+	var results;
+	var course_details = new Array();
+	conn.query('USE ' + DATABASE);
+	var filter = req.params.searchterm;
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value LIKE '" + filter + "' GROUP BY content_type_course.field_course_code_value",
+		function(err, rows, fields) {
+			if (err) throw err;
+			results = rows;
+			console.log(results);
+			for (row in results) {
+				course_details.push(results[row]);
+			}
+			res.send({course_details:course_details});
+		}
+	)
+}
 
 //reminder for other piece -- possible exp to diff file
 //find in a certain way
