@@ -2,6 +2,9 @@ var express = require('express'),
 	courses = require('./routes/courses');
 var app = express();
 
+// TODO multiple params in the same route, e.g. no-vids and searchterm
+// with the correct actions
+
 app.get('/courses', courses.findAll);
 app.get('/courses/:youtube', courses.youtubeBool);
 
