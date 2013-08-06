@@ -31,7 +31,7 @@ exports.findAll = function(req,res) {
 	var results, courseamt;
 	//console.log(conn);
 	conn.query('USE ' + DATABASE);
-	conn.query('SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value',
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views, creativecommons_node.license_uri as license FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid FULL OUTER JOIN creativecommons_node ON creativecommons_node.nid LIKE content_type_course.nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value",
 		function(err, rows, fields) {
 			if (err) throw err;
 			courseamt = rows.length;
@@ -120,6 +120,26 @@ exports.findName = function(req, res) {
 		}
 	)
 }
+
+// exports.findByLicense = function(req, res) {
+// 	var results, courseamt;
+// 	var course_details = new Array();
+// 	conn.query('USE ' + DATABASE);
+// 	var filter = req.params.searchterm;
+// 	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views, creativecommons_node.license_uri as license FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid FULL OUTER JOIN creativecommons_node ON creativecommons_node.nid LIKE content_type_course.nid GROUP BY content_type_course.field_course_code_value",
+// 		function(err, rows, fields) {
+// 			if (err) throw err;
+// 			courseamt = rows.length;
+// 			results = rows;
+// 			console.log(results);
+// 			for (row in results) {
+// 				course_details.push(results[row]);
+// 			}
+// 			res.send({number_courses: courseamt, course_details:course_details});
+// 		}
+// 	)
+// }
+
 
 //reminder for other piece -- possible exp to diff file
 //find in a certain way
