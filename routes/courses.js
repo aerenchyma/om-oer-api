@@ -22,11 +22,11 @@ exports.findAll = function(req,res) {
 			courseamt = rows.length;
 			results = rows;
 			console.log(results);
-
+			//course_details.push({number_of_courses:courseamt}); // hmm
 			for (row in results) {
 				course_details.push(results[row]);
 			}
-			res.send(course_details);
+			res.send({number_of_courses: courseamt, courses: course_details}); // will be interesting
 		}
 	);
 };
