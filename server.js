@@ -5,6 +5,8 @@ var app = express();
 app.get('/courses', courses.findAll);
 app.get('/courses/:youtube', courses.youtubeBool);
 
+app.get('/courses/name/:searchterm', courses.filterName); // let's try this
+
 app.get('/courses/:unit', courses.findByUnit)
 
 app.listen(3000);
