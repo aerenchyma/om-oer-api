@@ -67,7 +67,7 @@ exports.youtubeBool = function(req, res) { // issue -- the param in this REST UR
 			}
 		);
 	}
-	else if (yt == 'novids') {
+	else if (yt == 'no-vids') {
 		conn.query('SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid = content_type_course.nid WHERE oer_analytics_youtube.course_nid IS null AND field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value',
 			function(err, rows, fields) {
 				if (err) throw err;
