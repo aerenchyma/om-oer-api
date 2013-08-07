@@ -11,7 +11,6 @@ conn.connect();
 
 /* TODOS */
 // 1st priority
-// TODO: add license to course details
 // TODO: add instructor, creator/maybe dscribe? info to course details
 // TODO: filter by instructor
 // TODO: filter by license
@@ -122,28 +121,118 @@ exports.findName = function(req, res) {
 	)
 }
 
-// exports.findByLicense = function(req, res) {
-// 	var results, courseamt;
-// 	var course_details = new Array();
-// 	conn.query('USE ' + DATABASE);
-// 	var filter = req.params.searchterm;
-// 	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views, creativecommons_node.license_uri as license FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid FULL OUTER JOIN creativecommons_node ON creativecommons_node.nid LIKE content_type_course.nid GROUP BY content_type_course.field_course_code_value",
-// 		function(err, rows, fields) {
-// 			if (err) throw err;
-// 			courseamt = rows.length;
-// 			results = rows;
-// 			console.log(results);
-// 			for (row in results) {
-// 				course_details.push(results[row]);
-// 			}
-// 			res.send({number_courses: courseamt, course_details:course_details});
-// 		}
-// 	)
-// }
+
+// license possibilities:
+// PDNL: http://creativecommons.org/publicdomain/zero/1.0/
+// BY: http://creativecommons.org/licenses/by/3.0/
+// BY-SA: http://creativecommons.org/licenses/by-sa/3.0/
+// BY-NC: http://creativecommons.org/licenses/by-nc/3.0/
+// BY-NC-SA: http://creativecommons.org/licenses/by-nc-sa/3.0/
+// BY-NC-ND: http://creativecommons.org/licenses/by-nc-nd/3.0/
+// All Rights Reserved: ""
 
 
-//reminder for other piece -- possible exp to diff file
-//find in a certain way
+exports.findByLicense = function(req, res) {
+	var results, courseamt;
+	var course_details = new Array();
+	conn.query('USE ' + DATABASE);
+	var lic = req.params.license;
+	if (lic == "by") {
+		conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL AND license_uri LIKE 'http://creativecommons.org/licenses/by/3.0/' GROUP BY content_type_course.field_course_code_value",
+			function(err, rows, fields) {
+				if (err) throw err;
+				courseamt = rows.length;
+				results = rows;
+				console.log(results);
+				for (row in results) {
+					course_details.push(results[row]);
+				}
+				res.send({number_courses: courseamt, course_details:course_details});
+			}
+		);
+	} else if (lic == "by-sa") {
+		conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL AND license_uri LIKE 'http://creativecommons.org/licenses/by-sa/3.0/' GROUP BY content_type_course.field_course_code_value",
+			function(err, rows, fields) {
+				if (err) throw err;
+				courseamt = rows.length;
+				results = rows;
+				console.log(results);
+				for (row in results) {
+					course_details.push(results[row]);
+				}
+				res.send({number_courses: courseamt, course_details:course_details});
+			}
+		);
+	} else if (lic == "by-nc-sa") {
+		conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL AND license_uri LIKE 'http://creativecommons.org/licenses/by-nc-sa/3.0/' GROUP BY content_type_course.field_course_code_value",
+			function(err, rows, fields) {
+				if (err) throw err;
+				courseamt = rows.length;
+				results = rows;
+				console.log(results);
+				for (row in results) {
+					course_details.push(results[row]);
+				}
+				res.send({number_courses: courseamt, course_details:course_details});
+			}
+		);
+	} else if (lic == "by-nc") {
+		conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL AND license_uri LIKE 'http://creativecommons.org/licenses/by-nc/3.0/' GROUP BY content_type_course.field_course_code_value",
+			function(err, rows, fields) {
+				if (err) throw err;
+				courseamt = rows.length;
+				results = rows;
+				console.log(results);
+				for (row in results) {
+					course_details.push(results[row]);
+				}
+				res.send({number_courses: courseamt, course_details:course_details});
+			}
+		);
+	} else if (lic == "by-nc-nd") {
+		conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL AND license_uri LIKE 'http://creativecommons.org/licenses/by-nc-nd/3.0/' GROUP BY content_type_course.field_course_code_value",
+			function(err, rows, fields) {
+				if (err) throw err;
+				courseamt = rows.length;
+				results = rows;
+				console.log(results);
+				for (row in results) {
+					course_details.push(results[row]);
+				}
+				res.send({number_courses: courseamt, course_details:course_details});
+			}
+		);
+	} else if (lic == "publicDomain") {
+		conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL AND license_uri LIKE 'http://creativecommons.org/publicdomain/zero/1.0/' GROUP BY content_type_course.field_course_code_value",
+			function(err, rows, fields) {
+				if (err) throw err;
+				courseamt = rows.length;
+				results = rows;
+				console.log(results);
+				for (row in results) {
+					course_details.push(results[row]);
+				}
+				res.send({number_courses: courseamt, course_details:course_details});
+			}
+		);
+	} else if (lic == "none") {
+		conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL AND license_uri LIKE '' GROUP BY content_type_course.field_course_code_value",
+			function(err, rows, fields) {
+				if (err) throw err;
+				courseamt = rows.length;
+				results = rows;
+				console.log(results);
+				for (row in results) {
+					course_details.push(results[row]);
+				}
+				res.send({number_courses: courseamt, course_details:course_details});
+			}
+		);
+	}
+}
+
+
+//find by unit -- not real impl atm
 exports.findByUnit = function(req, res) {
 	res.send({unit:req.params.unit, name: "SI 101", description: "a fake intro class"});
 };
