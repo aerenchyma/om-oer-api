@@ -228,5 +228,4 @@ exports.findByUnit = function(req, res) {
 	res.send({unit:req.params.unit, name: "SI 101", description: "a fake intro class"});
 };
 
-
-// also need larger aggregation.
+// end
