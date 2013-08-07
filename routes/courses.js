@@ -9,21 +9,6 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-/* TODOS */
-// 1st priority
-// TODO: add instructor, creator/maybe dscribe? info to course details
-// TODO: filter by instructor
-// TODO: filter by license
-// TODO: filter by department, unit
-// TODO: filter by tag
-// 2nd priority
-// TODO: filter by number of materials
-// TODO: filter by type of materials
-// 3rd priority:
-// TODO change db s.t. it grabs G.A. info, YT comments
-//   and allow for queries for those
-// TODO poss grab other useful U-M info about courses, or even direct from materials where appropriate (latter unlikely)
-
 
 exports.findAll = function(req,res) {
 	var course_details = new Array();
