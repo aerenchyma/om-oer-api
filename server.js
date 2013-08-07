@@ -11,6 +11,8 @@ app.get('/courses/:youtube', courses.youtubeBool);
 app.get('/courses/name/:searchterm', courses.filterName);
 app.get('/courses/find/:searchterm', courses.findName);
 
+app.get('/courses/creator/:namesearch', courses.findByCreator);
+
 app.get('/courses/license/:license', courses.findByLicense);
 
 

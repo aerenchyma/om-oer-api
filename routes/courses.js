@@ -36,7 +36,7 @@ exports.youtubeBool = function(req, res) { // issue -- the param in this REST UR
 	var yt = req.params.youtube;
 	conn.query('USE ' + DATABASE);
 	if (yt == 'vids') {
-		conn.query('SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course RIGHT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value',
+		conn.query('SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid RIGHT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value',
 			function(err, rows, fields) {
 				if (err) throw err;
 				courseamt = rows.length;
@@ -50,7 +50,7 @@ exports.youtubeBool = function(req, res) { // issue -- the param in this REST UR
 		);
 	}
 	else if (yt == 'no-vids') {
-		conn.query('SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid = content_type_course.nid WHERE oer_analytics_youtube.course_nid IS null AND field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value',
+		conn.query('SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid = content_type_course.nid WHERE oer_analytics_youtube.course_nid IS null AND field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value',
 			function(err, rows, fields) {
 				if (err) throw err;
 				courseamt = rows.length;
@@ -71,7 +71,26 @@ exports.filterName = function(req, res) {
 	var course_details = new Array();
 	conn.query('USE ' + DATABASE);
 	var filter = req.params.searchterm;
-	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value LIKE '" + filter + "%' GROUP BY content_type_course.field_course_code_value",
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value LIKE '" + filter + "%' GROUP BY content_type_course.field_course_code_value",
+		function(err, rows, fields) {
+			if (err) throw err;
+			results = rows;
+			console.log(results);
+			for (row in results) {
+				course_details.push(results[row]);
+			}
+			res.send({course_details:course_details});
+		}
+	);
+}
+
+
+exports.findName = function(req, res) {
+	var results;
+	var course_details = new Array();
+	conn.query('USE ' + DATABASE);
+	var filter = req.params.searchterm;
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value LIKE '" + filter + "' GROUP BY content_type_course.field_course_code_value",
 		function(err, rows, fields) {
 			if (err) throw err;
 			results = rows;
@@ -84,23 +103,23 @@ exports.filterName = function(req, res) {
 	)
 }
 
-
-exports.findName = function(req, res) {
-	var results;
+exports.findByCreator = function(req, res) {
+	var results, courseamt;
 	var course_details = new Array();
 	conn.query('USE ' + DATABASE);
-	var filter = req.params.searchterm;
-	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, oer_analytics_youtube.totalviews AS youtube_views FROM content_type_course LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE field_course_code_value LIKE '" + filter + "' GROUP BY content_type_course.field_course_code_value",
+	var crName = req.params.namesearch;
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN oer_analytics_youtube ON oer_analytics_youtube.course_nid LIKE content_type_course.nid WHERE attributionName LIKE '" + crName + "%' GROUP BY content_type_course.field_course_code_value",
 		function(err, rows, fields) {
 			if (err) throw err;
 			results = rows;
+			courseamt = rows.length;
 			console.log(results);
 			for (row in results) {
 				course_details.push(results[row]);
 			}
-			res.send({course_details:course_details});
+			res.send({number_of_courses: courseamt, course_details:course_details});
 		}
-	)
+	);
 }
 
 
