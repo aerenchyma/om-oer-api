@@ -10,6 +10,9 @@ var conn = mysql.createConnection({
 conn.connect();
 
 
+/*****/
+
+
 exports.findAll = function(req,res) {
 	var course_details = new Array();
 	var results, courseamt;
