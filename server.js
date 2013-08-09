@@ -2,7 +2,8 @@ var express = require('express'),
 	courses = require('./routes/courses');
 var app = express();
 
-// TODO multiple params in the same route, TODO expected design of request URI
+// TODO multiple params in the same route
+// TODO expected design of request URI
 
 // GET all courses
 app.get('/courses', courses.findAll);
