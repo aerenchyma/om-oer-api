@@ -18,7 +18,7 @@ exports.findAll = function(req,res) {
 	var results, courseamt;
 	//console.log(conn);
 	conn.query('USE ' + DATABASE);
-	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, url_alias.dst AS path, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN url_alias ON url_alias.src LIKE '% content_type_course.nid' LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value",
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, url_alias.dst AS path, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN url_alias ON url_alias.src LIKE CONCAT('node/', content_type_course.nid) LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value",
 
 		function(err, rows, fields) {
 			if (err) throw err;
