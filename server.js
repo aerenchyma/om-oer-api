@@ -17,7 +17,8 @@ app.get('/courses/find/:searchterm', courses.findName);
 app.get('/courses/creator/:namesearch', courses.findByCreator);
 // GET courses by license (all cc-by-* formats, publicDomain, none == All Rights Reserved)
 app.get('/courses/license/:license', courses.findByLicense);
-
+// GET courses (more limited info) by parent unit
+app.get('/courses/units', courses.byUnit);
 
 //app.get('/courses/:unit', courses.findByUnit)
 

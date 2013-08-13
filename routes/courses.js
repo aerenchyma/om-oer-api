@@ -18,7 +18,7 @@ exports.findAll = function(req,res) {
 	var results, courseamt;
 	//console.log(conn);
 	conn.query('USE ' + DATABASE);
-	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, url_alias.dst AS path, content_field_parent_unit.field_parent_unit_nid AS parent_nid, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN content_field_parent_unit ON content_type_course.nid LIKE content_field_parent_unit.nid LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN url_alias ON url_alias.src LIKE CONCAT('node/', content_type_course.nid) LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value",
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, url_alias.dst AS path, creativecommons_node.license_uri as license, creativecommons_node.attributionName as creator, oer_analytics_youtube.totalviews as youtube_views FROM content_type_course LEFT OUTER JOIN creativecommons_node ON content_type_course.nid = creativecommons_node.nid LEFT OUTER JOIN url_alias ON url_alias.src LIKE CONCAT('node/', content_type_course.nid) LEFT OUTER JOIN oer_analytics_youtube ON content_type_course.nid = oer_analytics_youtube.course_nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value",
 
 		function(err, rows, fields) {
 			if (err) throw err;
@@ -125,6 +125,23 @@ exports.findByCreator = function(req, res) {
 	);
 }
 
+exports.byUnit = function(req, res) {
+	var results;
+	var course_details = new Array();
+	conn.query('USE ' + DATABASE);
+	conn.query("SELECT content_type_course.field_course_code_value AS name, content_type_course.nid AS nid, content_field_parent_unit.field_parent_unit_nid AS parent FROM content_type_course INNER JOIN content_field_parent_unit ON content_type_course.nid LIKE content_field_parent_unit.nid WHERE field_course_code_value IS NOT NULL GROUP BY content_type_course.field_course_code_value",
+		function(err, rows, fields) {
+			if (err) throw err;
+			results = rows;
+			console.log(results);
+			for (row in results) {
+				course_details.push(results[row]);
+			}
+			res.send({course_details: course_details});
+		}	
+	);
+
+}
 
 exports.findByLicense = function(req, res) {
 	var results, courseamt;
